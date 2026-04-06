@@ -1,0 +1,36 @@
+# env files
+.env
+Backend/.env
+frontend/.env
+
+# node modules
+node_modules/
+Backend/node_modules/
+frontend/node_modules/
+
+# logs
+*.log
+
+# build
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ML models (IMPORTANT)
+*.pkl
+*.joblib
+*.h5
+
+# dataset (optional)
+data/
+
+# Jupyter
+.ipynb_checkpoints

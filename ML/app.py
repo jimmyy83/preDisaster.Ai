@@ -7,25 +7,29 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Health check route (VERY IMPORTANT for Render)
+# ✅ Health check
 @app.route("/")
 def home():
     return {"message": "ML API Running"}
 
-# 📁 Load model safely
-base_dir = os.path.dirname(__file__)
-model_path = os.path.join(base_dir, "model", "disaster_model.pkl")
+# 🔥 Lazy load model
+model = None
 
-try:
-    model = joblib.load(model_path)
-    print("✅ Model loaded successfully")
-except Exception as e:
-    print("❌ Model load error:", e)
+def load_model():
+    global model
+    if model is None:
+        base_dir = os.path.dirname(__file__)
+        model_path = os.path.join(base_dir, "model", "disaster_model.pkl")
+        print("📦 Loading model from:", model_path)
+        model = joblib.load(model_path)
+        print("✅ Model loaded")
 
 # 🚀 Prediction API
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+        load_model()  # 🔥 IMPORTANT
+
         data = request.json
 
         if not data:
@@ -59,6 +63,5 @@ def predict():
             "error": str(e)
         }), 500
 
-# 🔥 Local run only
 if __name__ == "__main__":
     app.run()

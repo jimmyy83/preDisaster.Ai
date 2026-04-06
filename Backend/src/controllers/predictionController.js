@@ -14,7 +14,6 @@ const predictDisaster = async (req, res) => {
       pressure_evening
     } = req.body;
 
-    // 🔥 Validation (IMPORTANT)
     if (
       max_temp === undefined ||
       min_temp === undefined ||
@@ -25,27 +24,23 @@ const predictDisaster = async (req, res) => {
       });
     }
 
-    // 🔥 ML API URL (env se lo)
-    const ML_API = process.env.ML_API_URL || "http://localhost:5000";
+    const ML_API = process.env.ML_API_URL || "https://ml-api-zcln.onrender.com";
 
-    // 🔥 Call ML API
-    const response = await axios.post(
-      `${ML_API}/predict`,
-      {
-        max_temp,
-        min_temp,
-        humidity_morning,
-        humidity_evening,
-        rain,
-        wind_morning,
-        wind_evening,
-        pressure_morning,
-        pressure_evening
-      },
-      {
-        timeout: 5000 // ⏱️ important
-      }
-    );
+    const payload = {
+      max_temp: Number(max_temp),
+      min_temp: Number(min_temp),
+      humidity_morning: Number(humidity_morning),
+      humidity_evening: Number(humidity_evening),
+      rain: Number(rain),
+      wind_morning: Number(wind_morning),
+      wind_evening: Number(wind_evening),
+      pressure_morning: Number(pressure_morning),
+      pressure_evening: Number(pressure_evening)
+    };
+
+    const response = await axios.post(`${ML_API}/predict`, payload, {
+      timeout: 5000
+    });
 
     res.json({
       success: true,
@@ -53,7 +48,7 @@ const predictDisaster = async (req, res) => {
     });
 
   } catch (error) {
-    console.log("ML ERROR:", error.message);
+    console.log("ML ERROR FULL:", error.response?.data || error.message);
 
     res.status(500).json({
       message: "Prediction error",

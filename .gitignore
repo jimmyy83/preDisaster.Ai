@@ -25,7 +25,7 @@ __pycache__/
 *.pyc
 
 # ML models (IMPORTANT)
-*.pkl
+
 *.joblib
 *.h5
 

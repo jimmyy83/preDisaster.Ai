@@ -9,12 +9,17 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
 
   // 🔥 SAFE user parsing
-  let user = null;
+  const storedUser = localStorage.getItem("user");
+
+let user = null;
+
+if (storedUser && storedUser !== "undefined") {
   try {
-    user = JSON.parse(localStorage.getItem("user"));
+    user = JSON.parse(storedUser);
   } catch {
     user = null;
   }
+}
 
   const [open, setOpen] = useState(false);
 

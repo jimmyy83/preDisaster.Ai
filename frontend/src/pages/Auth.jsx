@@ -5,12 +5,12 @@ import api from "../services/api";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const boxRef = useRef();
 
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(""); // ✅ NEW
-
+  const [success, setSuccess] = useState(""); 
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -74,7 +74,7 @@ const Auth = () => {
     e.preventDefault();
 
     if (!validate()) return;
-
+    setLoading(true);
     try {
       if (isLogin) {
         const res = await api.post("/login", {
@@ -95,7 +95,7 @@ const Auth = () => {
         const res = await api.post("/register", form);
 
         if (res.status === 201) {
-          setSuccess("Registered successfully"); // ✅ UI MESSAGE
+          setSuccess("Registered successfully"); 
           setIsLogin(true);
         }
       }
@@ -109,7 +109,10 @@ const Auth = () => {
       } else {
         setErrors({ general: msg || "Login failed" });
       }
-    }
+    } finally {
+    setLoading(false);
+  }
+    
   };
 
   return (
@@ -134,7 +137,7 @@ const Auth = () => {
           {isLogin ? "Login" : "Create Account"}
         </h2>
 
-        {/* ✅ SUCCESS MESSAGE */}
+        
         {success && (
           <p className="text-green-400 text-center mb-3">
             {success}
@@ -207,10 +210,25 @@ const Auth = () => {
 
           <button
             type="submit"
-            className="mt-2 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 transition"
-          >
-            {isLogin ? "Login" : "Register"}
-          </button>
+            disabled={loading}
+            className={`mt-2 py-3 rounded-lg flex items-center justify-center gap-2 transition ${
+            loading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500"
+          }`}
+        >
+          {loading ? (
+              <>
+            
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            Processing...
+            </>
+              ) : isLogin ? (
+            "Login"
+              ) : (
+                "Register"
+                )}
+            </button>
         </form>
 
         <p className="text-sm text-gray-300 mt-5 text-center">

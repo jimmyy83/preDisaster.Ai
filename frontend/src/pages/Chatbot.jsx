@@ -7,42 +7,42 @@ const Chatbot = () => {
   const chatEndRef = useRef();
   const [typing, setTyping] = useState(false);
 
-  // ✅ welcome message
+  
   useEffect(() => {
     setChat([
       { type: "bot", text: "👋 Hello! How can I help you today?" }
     ]);
   }, []);
 
-  // ✅ auto scroll
+  
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
-  // ✅ send message
+ 
 const sendMessage = async () => {
   if (!message.trim()) return;
 
   const userMsg = { type: "user", text: message };
 
-  // ✅ STEP 1: user message turant add
+  
   setChat((prev) => [...prev, userMsg]);
 
-  setMessage(""); // input clear
+  setMessage("");
 
   try {
-    setTyping(true); // ✅ typing start
+    setTyping(true); 
 
     const res = await api.post("/chatbot", { message });
     const reply = res.data.reply;
 
-    // ✅ STEP 2: empty bot message add
+   
     setChat((prev) => [
       ...prev,
       { type: "bot", text: "" }
     ]);
 
-    // ✅ STEP 3: typewriter effect
+ 
     let i = 0;
     const interval = setInterval(() => {
       i++;
@@ -61,7 +61,7 @@ const sendMessage = async () => {
 
       if (i >= reply.length) {
         clearInterval(interval);
-        setTyping(false); // ✅ stop typing
+        setTyping(false);
       }
     }, 20);
 
@@ -74,7 +74,7 @@ const sendMessage = async () => {
   return (
   <div className="relative h-screen flex flex-col bg-gray-900 text-white overflow-hidden">
 
-    {/* 🔥 Header */}
+   
     <div className="relative z-10 bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg p-4 flex items-center gap-3 m-4 rounded-2xl">
       <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
         AI
@@ -102,7 +102,7 @@ const sendMessage = async () => {
   ))}
 </div>
 
-    {/* 💬 Chat Area */}
+  
     <div className="relative z-10 flex-1 overflow-y-auto p-6 mx-4 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10">
 
       <div className="flex flex-col gap-4">

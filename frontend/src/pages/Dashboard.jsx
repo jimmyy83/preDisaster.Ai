@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const isDanger = prediction && (prediction.probability?.normal < 0.5);
 
-  // 🔥 NEW: get top disaster
+ 
 const getTopDisaster = (prob) => {
   if (!prob) return null;
 
@@ -56,41 +56,40 @@ const getTopDisaster = (prob) => {
   return {
     name: top[0],
     value: Math.round(top[1] * 100),
-    isWeak: top[1] < 0.15 // 🔥 NEW
+    isWeak: top[1] < 0.15 
   };
 };
 
   const topDisaster = getTopDisaster(prediction?.probability);
 
   const getWeatherIcon = (code, isDay = true) => {
-  // ☀️ Clear
+  
   if (code === 0) {
     return isDay
       ? <Sun size={40} className="text-yellow-400" />
       : <Moon size={40} className="text-gray-300" />;
   }
 
-  // ☁️ Cloudy
+
   if (code >= 1 && code <= 3) {
     return <Cloud size={40} className="text-gray-400" />;
   }
 
-  // 🌫️ Fog
+
   if (code >= 45 && code <= 48) {
     return <Cloud size={40} className="text-gray-500" />;
   }
 
-  // 🌧️ Rain
+ 
   if (code >= 51 && code <= 67) {
     return <CloudRain size={40} className="text-blue-400" />;
   }
 
-  // ❄️ Snow
+ 
   if (code >= 71 && code <= 77) {
     return <CloudSnow size={40} className="text-blue-200" />;
   }
 
-  // ⛈️ Thunderstorm
   if (code >= 80 && code <= 99) {
     return <CloudLightning size={40} className="text-yellow-300" />;
   }

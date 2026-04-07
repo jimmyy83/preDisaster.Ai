@@ -2,6 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { predictDisaster } = require("../controllers/predictionController");
 
-app.use("/api/predict", predictionRoutes);
+router.post("/", predictDisaster); // 🔥 correct
 
 module.exports = router;

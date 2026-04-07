@@ -7,19 +7,20 @@ const predictionRoutes = require("./routes/predictionRoutes");
 const emergencyRoutes = require("./routes/emergencyRoutes");
 const chatbotRoutes = require("./routes/chatbotRoutes");
 
-const app = express();
+const app = express();  // 🔥 YE LINE MUST HAI (top pe)
 
+// middlewares
 app.use(cors());
 app.use(express.json());
 
 // routes
 app.use("/api", userRoutes);
 app.use("/api/reports", reportRoutes);
-app.use("/api", predictionRoutes);
+app.use("/api/predict", predictionRoutes);
 app.use("/api/emergency", emergencyRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 
-// ✅ health route
+// health route
 app.get("/", (req, res) => {
   res.send("Backend Running 🚀");
 });

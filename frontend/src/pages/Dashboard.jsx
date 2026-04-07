@@ -24,9 +24,16 @@ const Dashboard = () => {
   const isFetching = useRef(false);
 
   const [prediction, setPrediction] = useState(() => {
+  try {
     const saved = localStorage.getItem("prediction");
-    return saved ? JSON.parse(saved) : null;
-  });
+
+    if (!saved || saved === "undefined") return null;
+
+    return JSON.parse(saved);
+  } catch {
+    return null;
+  }
+});
 
   const [weather, setWeather] = useState(null);
   const [windHourly, setWindHourly] = useState([]);

@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
 const { predictDisaster } = require("../controllers/predictionController");
 
-// ✅ Prediction API
-router.post("/", predictDisaster);
+router.post("/predict", predictDisaster);
 
 module.exports = router;

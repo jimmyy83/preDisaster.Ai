@@ -14,16 +14,6 @@ const predictDisaster = async (req, res) => {
       pressure_evening
     } = req.body;
 
-    if (
-      max_temp === undefined ||
-      min_temp === undefined ||
-      humidity_morning === undefined
-    ) {
-      return res.status(400).json({
-        message: "Missing required fields"
-      });
-    }
-
     const ML_API = process.env.ML_API_URL || "https://ml-api-zcln.onrender.com";
 
     const payload = {
@@ -38,9 +28,26 @@ const predictDisaster = async (req, res) => {
       pressure_evening: Number(pressure_evening)
     };
 
-    const response = await axios.post(`${ML_API}/predict`, payload, {
-      timeout: 5000
-    });
+    // 🔥 DELAY (IMPORTANT)
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // 🔁 RETRY FUNCTION
+    const callML = async (retry = 0) => {
+      try {
+        return await axios.post(`${ML_API}/predict`, payload, {
+          timeout: 10000
+        });
+      } catch (err) {
+        if (err.response?.status === 429 && retry < 2) {
+          console.log("Retrying ML...");
+          await new Promise(r => setTimeout(r, 2000));
+          return callML(retry + 1);
+        }
+        throw err;
+      }
+    };
+
+    const response = await callML();
 
     res.json({
       success: true,
@@ -48,7 +55,7 @@ const predictDisaster = async (req, res) => {
     });
 
   } catch (error) {
-    console.log("ML ERROR FULL:", error.response?.data || error.message);
+    console.log("ML ERROR:", error.response?.data || error.message);
 
     res.status(500).json({
       message: "Prediction error",

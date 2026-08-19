@@ -7,12 +7,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Health check
+
 @app.route("/")
 def home():
     return {"message": "ML API Running"}
 
-# 🔥 Lazy load model
+
 model = None
 
 def load_model():
@@ -24,11 +24,11 @@ def load_model():
         model = joblib.load(model_path)
         print("✅ Model loaded")
 
-# 🚀 Prediction API
+
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        load_model()  # 🔥 IMPORTANT
+        load_model() 
 
         data = request.json
 
